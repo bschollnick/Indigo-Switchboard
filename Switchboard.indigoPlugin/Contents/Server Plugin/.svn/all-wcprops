@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin
+END
+Actions.xml
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin/Actions.xml
+END
+Devices.xml
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin/Devices.xml
+END
+Events.xml
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin/Events.xml
+END
+PluginConfig.xml
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin/PluginConfig.xml
+END
+plugin.py
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin/plugin.py
+END
+application.icns
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/SWITCHBOARDSVN/!svn/ver/6/Working/Switchboard.indigoPlugin/Switchboard.indigoPlugin/Contents/Server%20Plugin/application.icns
+END

@@ -1,0 +1,20 @@
+(Copied from Readme.txt)
+
+Donations:
+
+To help fund the continued development of this plugin...  Please consider donating. 
+
+At this time my software is free, including the Indigo Web Plugin’s and attachment scripts…
+
+But the cost to make the plugins and other software is not cheap.  Not to mention the additional cost of
+keeping current in the Home Automation field, and research, etc…
+
+Some of the users of my software has asked about making Donations…  So, here’s the plan:
+
+If you want your donation to be payment for a software package, please write it down in the donation’s 
+comments.  Otherwise the donation will go towards paying for Web Hosting.  Anyone that indicates that
+they wish to be credited for a donation, will be listed as a donor, either on the website and/or 
+software plugin (if the user was donating to a specific plugin).
+
+To Donate, please go to http://www.schollnick.net/wordpress/about/donations/   and click on the
+donate icon.

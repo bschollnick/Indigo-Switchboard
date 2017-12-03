@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<PluginConfig>
+		<SupportURL></SupportURL>
+
+		<Field type="checkbox" id="enableX10" default="true">
+			<Label>Enable Monitoring
+X10 Devices:</Label>
+		</Field>
+	
+		<Field type="checkbox" id="enableInsteon" default="true">
+			<Label>Enable Monitoring 
+Insteon Devices:</Label>
+		</Field>
+
+￼<Field id="simpleSeparator1" 
+		type="separator" />
+	
+			<Field type="checkbox" id="sendHeartBeatEmails">
+					<Label>Send Email(s) regarding
+Heartbeat Timeouts:</Label>
+			</Field>
+
+			<Field id="EmailAddresses" type="textfield" enabledBindingId="sendHeartBeatEmails">
+				<Label>Email Addresses to
+notify if the a X10
+Sensor misses it's 
+heartbeat.
+(Seperate multiple
+addresses with
+commas)</Label>
+			</Field>
+
+￼<Field id="simpleSeparator2" 
+		type="separator" />
+		
+		<Field type="checkbox" id="showDebugInfo">
+			<Label>Enable debuging:</Label>
+			<Description>(not recommended)</Description>
+		</Field>
+		
+</PluginConfig>

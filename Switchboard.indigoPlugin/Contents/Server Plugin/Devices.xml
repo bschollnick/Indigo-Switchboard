@@ -1,0 +1,447 @@
+<?xml version="1.0"?>
+<Devices>
+
+<!-- Security Control Center Definition -->
+
+<Device type="custom" id="SecurityCenter">
+	<Name>Security Control Panel</Name>
+	<ConfigUI>
+		<Field id="simpleSeparator1" 
+		type="separator" />
+	</ConfigUI>
+	<States>
+		<State id="Panic">
+			<ValueType>Boolean</ValueType>
+			<TriggerLabel>Panic</TriggerLabel>
+			<ControlPageLabel>Panic</ControlPageLabel>
+		</State>
+
+		<State id="Armed">
+			<ValueType>
+				<List>
+					<Option value="Disarmed">Disarmed</Option>
+					<Option value="Armed">Armed</Option>
+				</List>
+			</ValueType>
+			<TriggerLabel>Alarm Status</TriggerLabel>
+			<ControlPageLabel>Alarm Status</ControlPageLabel>
+		</State>		
+
+		<State id="Last_Updated">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Sensor has been updated</TriggerLabel>
+			<ControlPageLabel>Time Sensor was Last Updated</ControlPageLabel>
+		</State>
+
+	</States>
+</Device>
+
+
+<!-- X10 Device Definition -->
+
+<Device type="custom" id="X10Device">
+	<Name>X10 Monitored Device</Name>
+	<ConfigUI>
+		<Field type="checkbox" id="IgnoreDevice">
+			<Label>Ignore This Device</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="simpleSeparator1" 
+		type="separator" />
+
+		<Field id="X10Security" type="textfield" defaultValue="" hidden="No">
+		<Label>X10 Security Code</Label>
+		<Description></Description>
+		</Field>
+
+		<Field id="simpleSeparator2" type="separator" />
+
+		<Field type="checkbox" id="IgnoreOrphan">
+			<Label>Do not warn if unassociated 
+w/Monitor Device Group</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="simpleSeparator3" type="separator" />
+
+		<Field type="checkbox" id="IgnoreHeartbeats">
+			<Label>Turn Off Heartbeat Warnings</Label>
+			<Description></Description>
+		</Field>
+
+		<Field type="checkbox" id="OverrideHeartbeatTimeOut">
+			<Label>Override the Heartbeat
+Timeout for this Device</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="X10HeartBeatTimeOut" type="textfield" defaultValue="200" hidden="No" enableBindingId="OverrideHeartbeatTimeOut" visibleBindingId="OverrideHeartbeatTimeOut" visibleBindingValue="true">
+		<Label>Warn if X10 Heartbeat is not 
+seen within XXX Minutes</Label>
+		<Description>This option is only for Advanced Users.</Description>
+		</Field>
+
+	</ConfigUI>
+	<UiDisplayStateId>Display_onState</UiDisplayStateId>
+
+	<States>
+		<State id="Last_X10Command">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Last X10 Command Received</TriggerLabel>
+			<ControlPageLabel>The Last X10 Command Received</ControlPageLabel>
+		</State>
+		<State id="Last_X10HeartBeat">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Sensor Heartbeat was last detected at</TriggerLabel>
+			<ControlPageLabel>The Sensor Heartbeat was last detected at</ControlPageLabel>
+		</State>
+		<State id="Last_Updated">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Sensor has been updated</TriggerLabel>
+			<ControlPageLabel>Time Sensor was Last Updated</ControlPageLabel>
+		</State>
+		<State id="Last_Triggered">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The device was last triggered</TriggerLabel>
+			<ControlPageLabel>The Device was last triggered at</ControlPageLabel>
+		</State>
+
+		<State id="onState">
+			<ValueType>Boolean</ValueType>
+			<TriggerLabel>The Device is On</TriggerLabel>
+			<ControlPageLabel>The Device is On</ControlPageLabel>
+		</State>
+		<State id="Display_onState">
+			<ValueType>Boolean</ValueType>
+			<TriggerLabel>Gui Display State</TriggerLabel>
+			<ControlPageLabel>Gui Display State</ControlPageLabel>
+		</State>
+	</States>
+</Device>
+
+
+<!-- Monitored Device Group Definition -->
+<Device type="custom" id="MonitoredDeviceGroup">
+	<Name>Monitored Device Group</Name>
+	<ConfigUI>
+		<Field id="simpleSeparator1" 
+		type="separator" />
+		
+		<Field id="Device_List" type="list">
+			<Label>Add these devices to the Zone:</Label>
+			<List class="self" method="return_eligible_devices" dynamicReload="yes"/>
+		</Field>
+		
+		<Field id="Add_to_Zone"
+				type="button" 
+				tooltip="Add a device to the Zone">
+			<CallbackMethod>add_device_to_zone</CallbackMethod>
+			<Title>Add to Zone</Title>
+		</Field>
+	
+		<Field id="RegisteredDevices" type="list">
+			<Label>Registered Devices for this Zone:</Label>
+			<List class="self" method="return_devices_in_zone" dynamicReload="yes"/>
+		</Field>
+		
+		<Field id="StoredDeviceList" type="textfield" defaultValue="" hidden="Yes">
+		</Field>
+		
+		<Field id="Remove_from_Zone"
+				type="button" 
+				tooltip="Remove a device to the Zone">
+			<CallbackMethod>Remove_from_Zone</CallbackMethod>
+			<Title>Remove From Zone</Title>
+		</Field>
+	
+		<Field id="simpleSeparator3" 
+			type="separator" />
+	
+		<Field type="checkbox" id="Usetimed">
+			<Label>Turn on timed Device Support:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="timedDeviceID" type="list" enabledBindingId="Usetimed">
+			<Label>Use This Timed Device Profile:</Label>
+			<List class="indigo.devices" filter="com.schollnick.indigoplugin.switchboard.timedDevice"/>
+		</Field>
+		<Field id="timelabel" type="label">
+			<Label>Timed Devices can be customized
+in their Profiles.</Label>
+		</Field>
+
+		<Field id="simpleSeparator4" 
+			type="separator" />
+	
+			
+		<Field type="checkbox" id="UseActionGroup">
+			<Label>Turn On Action Group Support:</Label>
+			<Description></Description>
+		</Field>
+	
+		<Field id="ActionGroup" type="textfield" enabledBindingId="UseActionGroup">
+<Label>Action Group Name
+(Without Suffix)</Label>
+		</Field>
+
+		<Field type="checkbox" id="ActionOnOpen" enabledBindingId="UseActionGroup">
+			<Label>Only on Open:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field type="checkbox" id="ActionOnClose" enabledBindingId="UseActionGroup">
+			<Label>Only on Close:</Label>
+			<Description></Description>
+		</Field>
+	
+		<Field id="simpleSeparator5" 
+			type="separator"/>
+	
+		<Field type="checkbox" id="SendEmail">
+			<Label>Turn On Email Support:</Label>
+			<Description></Description>
+		</Field>
+	
+		<Field id="Email" type="textfield" defaultValue="" hidden="No" enabledBindingId="SendEmail">
+<Label>Email Addresses
+(Seperate with Commas)</Label>
+		</Field>
+
+		<Field type="checkbox" id="EmailOnOpen" enabledBindingId="SendEmail">
+			<Label>Sent on Open:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field type="checkbox" id="EmailOnClose" enabledBindingId="SendEmail">
+			<Label>Sent on Close:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field type="checkbox" id="CustomEmailEnabled" enabledBindingId="SendEmail">
+			<Label>Use Custom Email Message:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="CustomEmailText" type="textfield" defaultValue="" hidden="No" enabledBindingId="CustomEmailEnabled">
+			<Label>The Text of the Custom Email Message</Label>
+		</Field>
+
+<!-- Waiting on Support from Indigo
+		<Field type="checkbox" id="RepeatEmailEnabler" enabledBindingId="SendEmail">
+			<Label>Resend the Email:</Label>
+			<Description></Description>
+		</Field>
+			￼<Field type="menu" id="RepeatEmailCount" defaultValue="1" enableBindingId="RepeatEmailEnabler">
+				<Label>Resend Email, up to :</Label>
+				<List>
+					<Option value="1">1 (Once)</Option>
+					<Option value="2">2</Option>
+					<Option value="3">3</Option>
+					<Option value="4">4</Option>
+					<Option value="5">5</Option>
+					<Option value="6">6</Option>
+					<Option value="7">7</Option>
+				</List>
+			</Field>
+			￼<Field type="menu" id="RepeatEmailDelay" defaultValue="1" enableBindingId="RepeatEmailEnabler">
+				<Label>Delay between the Email Resends:</Label>
+				<List>
+					<Option value="5">5 Minutes</Option>
+					<Option value="10">10 Minutes</Option>
+					<Option value="15">15 Minutes</Option>
+					<Option value="20">20 Minutes</Option>
+					<Option value="30">30 Minutes</Option>
+					<Option value="45">45 Minutes</Option>
+					<Option value="60">1 Hour</Option>
+					<Option value="120">2 Hours</Option>
+					<Option value="180">3 Hour</Option>
+				</List>
+			</Field>
+			<Field type="checkbox" id="CancelRepeats" enabledBindingId="RepeatEmailEnabler">
+<Label>Cancel any Remaining Emails, 
+when all Devices are closed/off.</Label>
+				<Description></Description>
+			</Field>
+			-->
+	
+		<Field id="simpleSeparator6" 
+			type="separator" />
+
+		<Field type="checkbox" id="UseSpeech">
+			<Label>Turn On Speech Support:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="Speech" type="textfield" defaultValue="" hidden="No" enabledBindingId="UseSpeech">
+			<Label>Say the following</Label>
+		</Field>
+
+		<Field type="checkbox" id="SayOnOpen" enabledBindingId="UseSpeech">
+			<Label>Only on Open:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field type="checkbox" id="SayOnClose" enabledBindingId="UseSpeech">
+			<Label>Only on Close:</Label>
+			<Description></Description>
+		</Field>
+		
+			
+	</ConfigUI>
+	<States>
+		<State id="DeviceID_Last_Triggered">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The ID of the device that was last triggered</TriggerLabel>
+			<ControlPageLabel>The ID of the Device that was last triggered</ControlPageLabel>
+		</State>
+		<State id="DeviceName_Last_Triggered">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Name of the device that was last triggered</TriggerLabel>
+			<ControlPageLabel>The Name of the device that was last triggered</ControlPageLabel>
+		</State>
+		<State id="Last_Triggered">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The time stamp of the last trigger</TriggerLabel>
+			<ControlPageLabel>The time stamp of the last trigger</ControlPageLabel>
+		</State>
+		<State id="Last_Updated">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Device was Last Updated at</TriggerLabel>
+			<ControlPageLabel>The Device was Last Updated at</ControlPageLabel>
+		</State>
+		<State id="Number_Triggered_Devices">
+			<ValueType>Integer</ValueType>
+			<TriggerLabel>Number of Devices that are currently on or triggered</TriggerLabel>
+			<ControlPageLabel>Number of Devices that are currently on or triggered</ControlPageLabel>
+		</State>
+		<State id="Triggered_In_Group">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Names of any On or Triggered Devices</TriggerLabel>
+			<ControlPageLabel>The Names of any On or Triggered Devices</ControlPageLabel>
+		</State>
+		<State id="Devices_Triggered">
+			<ValueType>Boolean</ValueType>
+			<TriggerLabel>Are any devices On or Triggered in group</TriggerLabel>
+			<ControlPageLabel>Are any devices On or Triggered in group</ControlPageLabel>
+		</State>
+	</States>
+</Device>
+
+
+<!-- Timed Device Profile Definition -->
+
+<Device type="custom" id="timedDevice">
+	<Name>Timed Profile</Name>
+	<ConfigUI>
+		<Field type="checkbox" id="IgnoreDevice">
+			<Label>Deactivate This Device</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="simpleSeparator1" 
+		type="separator" />
+
+		<Field id="timedDeviceToUse" type="Menu">
+<Label>Activate This Device when this   
+Profile is used:</Label>
+			<List class="indigo.devices"/>
+		</Field>
+
+		<Field type="Menu" id="Ignoretimed" defaultValue="0">
+			<Label>After the device is activated, 
+Do not activate again for:</Label>
+			<List>
+				<Option value="0">Always Activate</Option>
+				<Option value="1">1 Minute</Option>
+				<Option value="2">2 Minutes</Option>
+				<Option value="5">5 Minutes</Option>
+				<Option value="7">7 Minutes</Option>
+				<Option value="10">10 Minutes</Option>
+				<Option value="15">15 Minutes</Option>
+				<Option value="30">30 Minutes</Option>
+				<Option value="60">1 Hour</Option>
+				<Option value="300">5 Hours</Option>
+				<Option value="1440">1 Day</Option>
+			</List>
+		</Field>
+
+		<Field type="Menu" id="timedDuration" defaultValue="000">
+			<Label>Turn the Device on for:</Label>
+			<List>
+				<Option value="000">10 Seconds</Option>
+				<Option value="015">15 Seconds</Option>
+				<Option value="030">30 Seconds</Option>
+				<Option value="1">1 Minute</Option>
+				<Option value="2">2 Minutes</Option>
+				<Option value="5">5 Minutes</Option>
+				<Option value="7">7 Minutes</Option>
+				<Option value="10">10 Minutes</Option>
+				<Option value="15">15 Minutes</Option>
+				<Option value="30">30 Minutes</Option>
+				<Option value="60">1 Hour</Option>
+				<Option value="300">5 Hours</Option>
+				<Option value="1440">1 Day</Option>
+			</List>
+		</Field>
+		
+		<Field id="simpleSeparator3" 
+		type="separator" />
+
+		<Field id="var_controller_label" type="label">
+			<Label>Controlling Variables when set True will 
+prevent the Timed Profile from occuring. </Label>
+		</Field>
+
+		<Field type="checkbox" id="var_controller">
+			<Label>Enable Controlling Variable:</Label>
+			<Description></Description>
+		</Field>
+
+		<Field id="Bound_Variable" type="list">
+			<List class="indigo.variables" filter="indigo.readWrite"/>
+		</Field>
+
+		<Field id="var_controller_label2" type="label">
+			<Label>This allows you to selectively control if 
+this Timed Profile will activate.</Label>
+		</Field>
+
+
+		<Field id="simpleSeparator2" 
+		type="separator" />
+
+		<Field id="exampleLabel" type="label">
+			<Label>Selective Controls</Label>
+		</Field>
+
+		<Field type="checkbox" id="Trigger_On_Open">
+			<Label>Only trigger on Activation
+(Opened, Turned On, etc):</Label>
+			<Description></Description>
+		</Field>
+
+		<Field type="checkbox" id="Trigger_On_Close">
+			<Label>Only trigger on De-Activation
+(Closed, Turned Off, etc):</Label>
+			<Description></Description>
+		</Field>
+
+	</ConfigUI>
+
+	<States>
+		<State id="Last_Updated">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The Sensor has been updated</TriggerLabel>
+			<ControlPageLabel>Time Sensor was Last Updated</ControlPageLabel>
+		</State>
+		<State id="Last_Triggered">
+			<ValueType>String</ValueType>
+			<TriggerLabel>The device was last triggered at</TriggerLabel>
+			<ControlPageLabel>The Device was last triggered at</ControlPageLabel>
+		</State>
+	</States>
+</Device>
+
+</Devices>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<Events>
+	<SupportURL>http://www.schollnick.net/wordpress</SupportURL>
+	<Event id="ApplianceOn">
+		<Name>Appliance Turned On</Name>
+	</Event>
+
+	<Event id="ApplianceOff">
+		<Name>Appliance Turned Off</Name>
+	</Event>
+
+	<Event id="LampOn">
+		<Name>Lamp Turned On</Name>
+	</Event>
+
+	<Event id="LampOff">
+		<Name>Lamp Turned Off</Name>
+	</Event>
+
+	<Event id="SensorOpened">
+		<Name>Sensor Opened</Name>
+	</Event>
+	
+	<Event id="SensorClosed">
+		<Name>Sensor Opened</Name>
+	</Event>
+
+	<Event id="HomeArmed">
+		<Name>Switched to Armed Status (Home Mode)</Name>
+	</Event>
+
+	<Event id="AwayArmed">
+		<Name>Switched to Armed Status (Away Mode)</Name>
+	</Event>
+
+	<Event id="AllLightsOff">
+		<Name>All Lights Off</Name>
+	</Event>
+
+	<Event id="AllLightsOn">
+		<Name>All Lights On</Name>
+	</Event>
+
+	<Event id="Disarm">
+		<Name>Disarm Alarm</Name>
+	</Event>
+
+	<Event id="PanicPressed">
+		<Name>Panic Pressed</Name>
+	</Event>
+
+	<Event id="PanicReleased">
+		<Name>Panic Released</Name>
+	</Event>
+</Events>
