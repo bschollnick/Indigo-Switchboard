@@ -569,7 +569,7 @@ class Plugin(indigo.PluginBase):
 				#
 				# email substitute
 				#
-                email_text = self.substitute(devicerec.globalProps[plugin_id]["CustomEmailText"])
+				email_text = self.substitute(devicerec.globalProps[plugin_id]["CustomEmailText"])
 				indigo.server.sendEmailTo ( ";".join(email_addrs), "Switchboard Alert - %s..." % ZoneName , email_text )
 			else:
 				# Send the standard Email Template
