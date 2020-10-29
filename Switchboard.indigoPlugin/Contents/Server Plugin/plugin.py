@@ -356,6 +356,10 @@ class Plugin(indigo.PluginBase):
 					self.debugLog ("Armed")
 					stateString = "_Armed"
 					onState = None
+				elif X10_Action.upper() in ["ARM HOME (MIN DELAY)", "ARM HOME (MAX DELAY)"]:
+					self.debugLog ("Armed Home")
+					stateString = "_ArmedHome"
+					onState = None
 				elif X10_Action.upper() == "DISARM":
 					self.debugLog ("Disarmed")
 					stateString = "_Disarm"
@@ -796,7 +800,7 @@ Please check the device and/or batteries.
 		#
 		devicerecord = indigo.devices[int(deviceID)]
 		stateString, onState = self.return_x10_action_state ( cmd.secFunc.strip() )
-		if devicerecord.states.get ("Last_X10Command","").upper() == cmd.secFunc.strip().upper() and not(stateString in ["_Armed", "_Disarm", "_Panic"]):
+		if devicerecord.states.get ("Last_X10Command","").upper() == cmd.secFunc.strip().upper() and not(stateString in ["_Armed", "_ArmedHome", "_Disarm", "_Panic"]):
 			self.debugLog ("\tX10 Heartbeat detected")
 			devicerecord.updateStateOnServer ("Last_X10HeartBeat", time.asctime(time.localtime ( )) )
 			devicerecord.updateStateOnServer ("Last_X10Command", cmd.secFunc.strip() )
@@ -815,12 +819,15 @@ Please check the device and/or batteries.
 				#
 				self.trigger_zone ( zoneRec = zonerecord, deviceRec = devicerecord, X10_Action = cmd.secFunc )
 
-			if stateString in ["_Armed", "_Disarm", "_Panic"]:
+			if stateString in ["_Armed", "_ArmedHome", "_Disarm", "_Panic"]:
 				SC_id = self.return_security_center ()
 				if SC_id <> None:
 					SecDev = indigo.devices [ int(SC_id) ]
 					if stateString == "_Armed":
 						SecDev.updateStateOnServer ("Armed", "Armed")
+						SecDev.updateStateOnServer ("Last_Updated", time.asctime(time.localtime ( )) )
+					elif stateString == "_ArmedHome":
+						SecDev.updateStateOnServer ("Armed", "ArmedHome")
 						SecDev.updateStateOnServer ("Last_Updated", time.asctime(time.localtime ( )) )
 					elif stateString == "_Disarm":
 						SecDev.updateStateOnServer ("Armed", "Disarmed")
