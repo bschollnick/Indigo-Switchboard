@@ -625,7 +625,7 @@ class Plugin(indigo.PluginBase):
 
 				X10Security = str(newDev.globalProps[plugin_id]["X10Security"]).upper()
 				if X10Security <> "":
-					self.X10List [ X10Security ] = str(dev.id)
+					self.X10List [ X10Security ] = str(newDev.id)
 #			return None
 
 		changeList = [(key, val) for key, val in newDev.states.iteritems()
