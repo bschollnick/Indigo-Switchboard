@@ -21,6 +21,7 @@
 				<List>
 					<Option value="Disarmed">Disarmed</Option>
 					<Option value="Armed">Armed</Option>
+					<Option value="ArmedHome">Armed Home</Option>
 				</List>
 			</ValueType>
 			<TriggerLabel>Alarm Status</TriggerLabel>
