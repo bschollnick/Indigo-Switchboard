@@ -146,6 +146,7 @@ class Plugin(indigo.PluginBase):
 			X10_props = indigo.devices[dev].pluginProps
 			X10_props['address'] = X10Security
 			indigo.devices[dev].replacePluginPropsOnServer(X10_props)
+			indigo.devices[dev].updateStateOnServer ("Display_onState", "Unknown")
 
 			#
 			#	Write the "pointer" to the X10 device list
@@ -800,10 +801,13 @@ Please check the device and/or batteries.
 		#
 		devicerecord = indigo.devices[int(deviceID)]
 		stateString, onState = self.return_x10_action_state ( cmd.secFunc.strip() )
+		displayState = stateString.replace ("_","")
 		if devicerecord.states.get ("Last_X10Command","").upper() == cmd.secFunc.strip().upper() and not(stateString in ["_Armed", "_ArmedHome", "_Disarm", "_Panic"]):
 			self.debugLog ("\tX10 Heartbeat detected")
 			devicerecord.updateStateOnServer ("Last_X10HeartBeat", time.asctime(time.localtime ( )) )
 			devicerecord.updateStateOnServer ("Last_X10Command", cmd.secFunc.strip() )
+			devicerecord.updateStateOnServer ("onState", onState )
+			devicerecord.updateStateOnServer ("Display_onState", displayState)
 			heartbeat = True
 		else:
 			heartbeat = False
