@@ -19,11 +19,11 @@ usable_model_types = ["Remote Button", "TriggerLinc", "Indigo Security Sensor"]
 
 plugin_id = "com.schollnick.indigoplugin.switchboard"
 insteon   = 0
-x10		  = 1
+x10		 = 1
 
-time_translation	 = { 	'000' 	: 10, 		'015' 	: 15,
-							'030' 	: 30,		'1'	  	: 60,
-							'2'	  	: 120,		'5'	  	: 300,
+time_translation	= { 	'000' 	: 10, 		'015' 	: 15,
+							'030' 	: 30,		'1'	 	: 60,
+							'2'	 	: 120,		'5'	 	: 300,
 							'7'   	: 420,		'10'	: 600,
 							'15'	: 900,		'30'	: 1800,
 							'60'	: 3600,		'300'	: 18000,
@@ -82,19 +82,19 @@ class Plugin(indigo.PluginBase):
 	def	deviceStopComm (self, dev):
 		self.debugLog ("Removing %s from Switchboard Devices List" % dev.name)
 		if dev.deviceTypeId == "MonitoredDeviceGroup":
-			if self.ZoneList.has_key ( str(dev.id) ):
+			if str(dev.id) in self.ZoneList:
 				del self.ZoneList [ str(dev.id) ]
 		elif dev.deviceTypeId == "X10Device":
 			# self.X10List [ <X10 Sensor ID> ] = X10 Monitored Device ID
 			X10Security = str(indigo.devices[dev].globalProps[plugin_id]["X10Security"]).upper()
-			if X10Security <> "":
+			if X10Security != "":
 				del self.X10List [ X10Security ]
 		elif dev.deviceTypeId == "SecurityCenter":
-			if self.SecurityCenter.has_key ( str(dev.id) ):
+			if str(dev.id) in self.SecurityCenter:
 				del self.SecurityCenter [ str(dev.id) ]
 
 	def	verify_device_properties ( self, dev, propertyname, boolean = False) :
-		if indigo.devices[dev].globalProps[plugin_id].has_key (propertyname):
+		if propertyname in indigo.devices[dev].globalProps[plugin_id]:
 			return
 		else:
 			newProps = dev.pluginProps
@@ -124,7 +124,7 @@ class Plugin(indigo.PluginBase):
 			self.verify_device_properties (dev, "SayOnClose")
 			self.verify_device_properties (dev, "ActionOnOpen", boolean = True)
 			self.verify_device_properties (dev, "ActionOnClose", boolean = True)
-			if not self.ZoneList.has_key ( str(dev.id) ):
+			if not str(dev.id) in self.ZoneList:
 				self.ZoneList [ str(dev.id) ] = []
 			self.ZoneList [ str(dev.id) ].append ( dev.id )
 		elif dev.deviceTypeId == "X10Device":
@@ -151,15 +151,15 @@ class Plugin(indigo.PluginBase):
 			#
 			#	Write the "pointer" to the X10 device list
 			#
-			if X10Security <> "":
+			if X10Security != "":
 				self.X10List [ X10Security ] = str(dev.id)
 		elif dev.deviceTypeId == "SecurityCenter":
-			if not self.SecurityCenter.has_key ( str(dev.id) ):
+			if not str(dev.id) in self.SecurityCenter:
 				self.SecurityCenter [ str(dev.id) ] = []
 			self.SecurityCenter [ str(dev.id) ].append ( dev.id )
 
 	def	return_security_center ( self ):
-		if self.SecurityCenter <> {}:
+		if self.SecurityCenter != {}:
 			return self.SecurityCenter.keys()[0]
 		return None
 	#
@@ -174,62 +174,62 @@ class Plugin(indigo.PluginBase):
 #		for devId in indigo.devices.iter (plugin_id):
 #			return devId.id
 
- 	def return_eligible_devices (self, filter="", valuesDict=None, typeId="", targetId=0):
- 		#
- 		#	Used in the SecuritySensors list.
- 		#
- 		#	This produces the list of eligible devices to be added into a security zone.
- 		#
- 		deviceArray = []
- 		devices_already_in_zone = valuesDict.get ("StoredDeviceList","").split(",")
- 		#self.debugLog ("-%s" % devices_already_in_zone)
- 		for x in indigo.devices:
- 				if devices_already_in_zone.count ( str(x.id) ) == 0:
- 					deviceArray.append ( (x.id, x.name) )
- 				else:
- 					pass
- 		sorted_da = sorted ( deviceArray, key = operator.itemgetter(1))
- 		return sorted_da
+	def return_eligible_devices (self, filter="", valuesDict=None, typeId="", targetId=0):
+		#
+		#	Used in the SecuritySensors list.
+		#
+		#	This produces the list of eligible devices to be added into a security zone.
+		#
+		deviceArray = []
+		devices_already_in_zone = valuesDict.get ("StoredDeviceList","").split(",")
+		#self.debugLog ("-%s" % devices_already_in_zone)
+		for x in indigo.devices:
+				if devices_already_in_zone.count ( str(x.id) ) == 0:
+					deviceArray.append ( (x.id, x.name) )
+				else:
+					pass
+		sorted_da = sorted ( deviceArray, key = operator.itemgetter(1))
+		return sorted_da
 
- 	def return_devices_in_zone (self, filter="", valuesDict=None, typeId="", targetId=0):
- 		#
- 		#	Return the list of devices that have already been assigned to the Zone
- 		#
- 		deviceArray = []
- 		devices_already_in_zone = valuesDict.get ("StoredDeviceList", "").split(",")
+	def return_devices_in_zone (self, filter="", valuesDict=None, typeId="", targetId=0):
+		#
+		#	Return the list of devices that have already been assigned to the Zone
+		#
+		deviceArray = []
+		devices_already_in_zone = valuesDict.get ("StoredDeviceList", "").split(",")
 
- 		for x in devices_already_in_zone:
- 			if x <> u'' and int(x) in indigo.devices:
- 				deviceArray.append ( (indigo.devices[int(x)].id, indigo.devices[int(x)].name) )
+		for x in devices_already_in_zone:
+			if x != u'' and int(x) in indigo.devices:
+				deviceArray.append ( (indigo.devices[int(x)].id, indigo.devices[int(x)].name) )
 
- 		sorted_da = sorted (deviceArray, key = operator.itemgetter(1))
+		sorted_da = sorted (deviceArray, key = operator.itemgetter(1))
 
- 		valuesDict ["RegisteredDevices"] = sorted_da
- 		return sorted_da
+		valuesDict ["RegisteredDevices"] = sorted_da
+		return sorted_da
 
- 	def	add_device_to_zone ( self, configscreen, typeId, devId):
- 		#
- 		#	Add a device to the Zone's device list
- 		#
- 		devices_already_in_zone = configscreen["StoredDeviceList"].split(",")
- 		for x in configscreen["Device_List"]:
- 			#
- 			#	Grab the selected Devices in the available Device_List
- 			#
- 			if  str(indigo.devices[int(x)].id) in devices_already_in_zone:
- 				#	Device Already exists in the Zone
- 				pass
- 			else:
- 				devices_already_in_zone.append ( str(indigo.devices[int(x)].id ) )
+	def	add_device_to_zone ( self, configscreen, typeId, devId):
+		#
+		#	Add a device to the Zone's device list
+		#
+		devices_already_in_zone = configscreen["StoredDeviceList"].split(",")
+		for x in configscreen["Device_List"]:
+			#
+			#	Grab the selected Devices in the available Device_List
+			#
+			if  str(indigo.devices[int(x)].id) in devices_already_in_zone:
+				#	Device Already exists in the Zone
+				pass
+			else:
+				devices_already_in_zone.append ( str(indigo.devices[int(x)].id ) )
 
- 		temp = "%s" % ",".join ( devices_already_in_zone )
- 		if temp.startswith (","):
- 			temp = temp[1:len(temp)]
- 		configscreen["StoredDeviceList"] = temp
+		temp = "%s" % ",".join ( devices_already_in_zone )
+		if temp.startswith (","):
+			temp = temp[1:len(temp)]
+		configscreen["StoredDeviceList"] = temp
 
- 		del configscreen["Device_List"]
- 		del configscreen["RegisteredDevices"]
- 		return configscreen
+		del configscreen["Device_List"]
+		del configscreen["RegisteredDevices"]
+		return configscreen
 
 
 	def	Remove_from_Zone ( self, configscreen, typeId, devId):
@@ -259,7 +259,7 @@ class Plugin(indigo.PluginBase):
 #
 
 	def	re_init_zones_with_trigger_status ( self ):
- 		for zdev 	in 	indigo.devices:
+		for zdev 	in 	indigo.devices:
 			if zdev.deviceTypeId == "MonitoredDeviceGroup":
 				indigo.server.log ("Updating Monitored Device Zone '%s'" % zdev.name)
 				triggered = []
@@ -276,7 +276,7 @@ class Plugin(indigo.PluginBase):
 					#	X10
 					#
 					if indigo.devices[int(idev)].deviceTypeId == "X10Device":
-						if indigo.devices[int(idev)].states.has_key ("onState"):
+						if "onState" in indigo.devices[int(idev)].states:
 #							indigo.server.log ("%s" % indigo.devices[int(idev)].name)
 							if indigo.devices[int(idev)].states["onState"] == True:
 								triggered.append ( indigo.devices[int(idev)].name.strip() )
@@ -301,8 +301,8 @@ class Plugin(indigo.PluginBase):
 	#
 	#	Return the (first found) Zone ID that an Indigo device is associated with.
 	#
- 		for zn in 	self.ZoneList.keys():
- 			if int(zn) in indigo.devices:
+		for zn in 	self.ZoneList.keys():
+			if int(zn) in indigo.devices:
 				registered_devs = indigo.devices[int(zn)].globalProps[plugin_id]["StoredDeviceList"].split(",")
 				if str(i_id) in registered_devs:
 					return zn
@@ -317,7 +317,7 @@ class Plugin(indigo.PluginBase):
 	#
 		timed_Ignore = timedDev.globalProps[plugin_id]["Ignoretimed"]
 		timed_Length = timedDev.globalProps[plugin_id]["timedDuration"]
-		timed_List 	 = timedDev.globalProps[plugin_id]["timedDeviceToUse"]
+		timed_List 	= timedDev.globalProps[plugin_id]["timedDeviceToUse"]
 		if timedDev.states.get ("Last_Triggered", "") == "":
 			timedDev.updateStateOnServer ("Last_Triggered", time.asctime(time.localtime ( 0 )) )
 		Last_Triggered  = time.mktime ( time.strptime (timedDev.states["Last_Triggered"]) )
@@ -344,7 +344,7 @@ class Plugin(indigo.PluginBase):
 	#
 		stateString = ""
 		onState = False
-		if X10_Action <> None:
+		if X10_Action != None:
 				if X10_Action.upper() in ["SENSOR ALERT (MAX DELAY)", "SENSOR ALERT (MIN DELAY)"]:
 					self.debugLog ("OPEN")
 					stateString = "_Open"
@@ -385,9 +385,9 @@ class Plugin(indigo.PluginBase):
 	#
 	#	Trigger the Zone actions associated with a zone.
 	#
-		if zoneRec <> None:
-	 		ZoneName   = zoneRec.name
-	 		DeviceName = deviceRec.name
+		if zoneRec != None:
+			ZoneName   = zoneRec.name
+			DeviceName = deviceRec.name
 			self.debugLog ("\tDevice (%s) is in Monitored Group '%s'" % (DeviceName, zoneRec.name) )
 			onState = None
 			stateString = ""
@@ -426,8 +426,8 @@ class Plugin(indigo.PluginBase):
 				#
 				#	Check Only_on_open status, and if necessary trigger action group
 				#
-				if only_on_open and onState <> False and stateString <> u"":
-					if indigo.actionGroups.has_key ( actiongroup_name ):
+				if only_on_open and onState != False and stateString != u"":
+					if actiongroup_name in indigo.actionGroups:
 						indigo.server.log ("Triggering actiongroup: %s" % actiongroup_name)
 						actiongroup = indigo.actionGroups.get ( actiongroup_name )
 						self.trigger_actiongroup ( actiongroup )
@@ -437,8 +437,8 @@ class Plugin(indigo.PluginBase):
 				#
 				#	Check Only_on_close status, and if necessary trigger action group
 				#
-				if only_on_close and onState == False and stateString <> u"":
-					if indigo.actionGroups.has_key ( actiongroup_name ):
+				if only_on_close and onState == False and stateString != u"":
+					if actiongroup_name in indigo.actionGroups:
 						indigo.server.log ("Triggering actiongroup: %s" % actiongroup_name)
 						actiongroup = indigo.actionGroups.get ( actiongroup_name )
 						self.trigger_actiongroup ( actiongroup )
@@ -448,8 +448,8 @@ class Plugin(indigo.PluginBase):
 				#
 				#	neither only_on_xxxx options have been checked, if necessary trigger action group
 				#
-				if not only_on_open and not only_on_close and stateString <> u"":
-					if indigo.actionGroups.has_key ( actiongroup_name ):
+				if not only_on_open and not only_on_close and stateString != u"":
+					if actiongroup_name in indigo.actionGroups:
 						indigo.server.log ("Triggering actiongroup: %s" % actiongroup_name)
 						actiongroup = indigo.actionGroups.get ( actiongroup_name )
 						self.trigger_actiongroup ( actiongroup )
@@ -492,7 +492,7 @@ class Plugin(indigo.PluginBase):
 					#
 					devices_already_triggered.remove ( DeviceName )
 					zoneRec.updateStateOnServer ("Triggered_In_Group", ",".join(devices_already_triggered) )
-					if zoneRec.states["Triggered_In_Group"] <> "" and zoneRec.states["Triggered_In_Group"][0] == ",":
+					if zoneRec.states["Triggered_In_Group"] != "" and zoneRec.states["Triggered_In_Group"][0] == ",":
 						zoneRec.updateStateOnServer ("Triggered_In_Group", zoneRec.states["Triggered_In_Group"][1:])
 
 					if zoneRec.states["Triggered_In_Group"] == "":
@@ -503,7 +503,7 @@ class Plugin(indigo.PluginBase):
 
 
 
-			if onState <> None:
+			if onState != None:
 					#
 					#	Timed Profile Activation
 					#
@@ -528,9 +528,9 @@ class Plugin(indigo.PluginBase):
 					#	Trigger Speech Text
 					#
 						text_to_say = zoneRec.globalProps[plugin_id]["Speech"]
-                        #
-                        #   substitute for text_to_speech
-                        #
+                       #
+                       #   substitute for text_to_speech
+                       #
 						text_to_say = self.substitute(text_to_say)
 						only_on_open = zoneRec.globalProps[plugin_id]["SayOnOpen"]
 						only_on_close = zoneRec.globalProps[plugin_id]["SayOnClose"]
@@ -562,8 +562,8 @@ class Plugin(indigo.PluginBase):
 
 	def		send_emails ( self, zonerec, devicerec ):
 			email_addrs = zonerec.globalProps[plugin_id]["Email"].split(",")
-	 		ZoneName   = zonerec.name
-	 		DeviceName = devicerec.name
+			ZoneName   = zonerec.name
+			DeviceName = devicerec.name
 
 			for email in email_addrs:
 				indigo.server.log ("Sending Emails to: %s", email)
@@ -608,24 +608,24 @@ class Plugin(indigo.PluginBase):
 				self.timed_device ( timed_device )
 
 
- 	def deviceUpdated(self, origDev, newDev):
- 		#
- 		#	This should only occur for Insteon Devices...  Since the X10 devices are custom
- 		#	Devices, and have no real state for modification.
- 		#
+	def deviceUpdated(self, origDev, newDev):
+		#
+		#	This should only occur for Insteon Devices...  Since the X10 devices are custom
+		#	Devices, and have no real state for modification.
+		#
 		kIgnoreKeyList = [u"lastupdated", u"Last_Updated", u"Last_Triggered",
 							u'Display_onState', u'Last_X10Command', u'Last_X10HeartBeat',
 							u"updatetime", u"updatetimestamp", u"timestamp"]
 
 		if origDev.deviceTypeId == "X10Device":
 			# self.X10List [ <X10 Sensor ID> ] = X10 Monitored Device ID
-			if str(origDev.globalProps[plugin_id]["X10Security"]).upper() <> str(newDev.globalProps[plugin_id]["X10Security"]).upper():
+			if str(origDev.globalProps[plugin_id]["X10Security"]).upper() != str(newDev.globalProps[plugin_id]["X10Security"]).upper():
 				X10Security = str(origDev.globalProps[plugin_id]["X10Security"]).upper()
-				if X10Security <> "":
+				if X10Security != "":
 					del self.X10List [ X10Security ]
 
 				X10Security = str(newDev.globalProps[plugin_id]["X10Security"]).upper()
-				if X10Security <> "":
+				if X10Security != "":
 					self.X10List [ X10Security ] = str(newDev.id)
 #			return None
 
@@ -687,9 +687,9 @@ class Plugin(indigo.PluginBase):
 		insteon_Value = cmd.cmdValue
 		id = self.InsteonList [ insteon_address.strip().upper() ]
 		newDev = indigo.devices [ id ]
- 		ZoneID = self.indigo_device_in_zone ( newDev.id )
- 		if ZoneID == None:
- 			return
+		ZoneID = self.indigo_device_in_zone ( newDev.id )
+		if ZoneID == None:
+			return
 		ZoneRecord = indigo.devices[ int(ZoneID) ]
 		#
 		#	InsteonCommandReceived is called by the Insteon command being received.  If the trigger isn't here,
@@ -713,13 +713,13 @@ class Plugin(indigo.PluginBase):
 		if secCodeId == "":
 			return (None, None)
 
-		if self.X10List.has_key ( str(secCodeId).upper() ):
+		if str(secCodeId).upper() in self.X10List:
 			deviceid = self.X10List [ str(secCodeId).upper() ]
 
-		elif secCodeId <> None:
+		elif secCodeId != None:
 			indigo.server.log ("An unregistered X10 device has been detected.  Security ID is %s" % secCodeId, isError=True)
 
-		if deviceid <> None:
+		if deviceid != None:
 			zoneid = self.indigo_device_in_zone ( deviceid )
 			if zoneid == None:
 				if not indigo.devices[int(deviceid)].globalProps[plugin_id]["IgnoreOrphan"]:
@@ -784,7 +784,7 @@ Please check the device and/or batteries.
 
 		zoneID, deviceID = self.find_x10_securitysensor_enrollment ( secCodeId = cmd.secCodeId, housecode = housecode, devicecode = devicecode)
 		self.debugLog ("X10 - Zone %s, Device %s " % (zoneID, deviceID) )
-		if zoneID <> None:
+		if zoneID != None:
 			zonerecord = indigo.devices[ int(zoneID) ]
 
 		if deviceID == None:
@@ -815,8 +815,8 @@ Please check the device and/or batteries.
 
 		self.check_X10_Heartbeats ()
 
-		if heartbeat <> True:
-			if zoneID <> None:
+		if heartbeat != True:
+			if zoneID != None:
 				#
 				#	X10CommandReceived is called by the X10 command being received.  Trigger Zone is necessary to allow
 				#	Functional triggers on the zones.
@@ -825,7 +825,7 @@ Please check the device and/or batteries.
 
 			if stateString in ["_Armed", "_ArmedHome", "_Disarm", "_Panic"]:
 				SC_id = self.return_security_center ()
-				if SC_id <> None:
+				if SC_id != None:
 					SecDev = indigo.devices [ int(SC_id) ]
 					if stateString == "_Armed":
 						SecDev.updateStateOnServer ("Armed", "Armed")
